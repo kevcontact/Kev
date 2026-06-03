@@ -7,3 +7,5 @@ PORTAFOLIO/
 .env*.local
 .vercel/
 web/public/media
+.worktrees/
+scripts/v1-shots/
