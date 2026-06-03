@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { padding: 30px 34px; display:flex; align-items:center; justify-content:space-between; }
+  .toggle { display:flex; align-items:center; gap:0; }
+  .seg { font-size:14px; font-weight:600; padding:8px 16px; color:var(--fg3); border-bottom:2px solid transparent; cursor:pointer; }
+  .seg.on { color:var(--ink); border-bottom-color:var(--ink); }
+  .cap { position:absolute; left:34px; bottom:22px; font-size:11px; color:var(--fg2); }
+</style>
+</head>
+<body>
+  <div class="toggle">
+    <span class="seg on">Gallery</span>
+    <span class="seg">Overview</span>
+  </div>
+  <span class="kev-counter">05 / 34</span>
+  <span class="cap">Project view toggle + scroll counter</span>
+</body>
+</html>

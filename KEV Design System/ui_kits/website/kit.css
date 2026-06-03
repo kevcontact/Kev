@@ -1,0 +1,74 @@
+/* KEV UI kit — local styles layered on the foundations.
+   Imports the system tokens, adds grain, cursor + frame helpers. */
+@import url('../../colors_and_type.css');
+
+html, body { height: 100%; }
+body { overflow-x: hidden; }
+
+/* Hide native cursor on fine pointers (custom cursor takes over) */
+@media (hover: hover) and (pointer: fine) {
+  .kev-app, .kev-app * { cursor: none; }
+}
+
+/* ---- Custom cursor ---- */
+.kev-cursor {
+  position: fixed; top: 0; left: 0;
+  width: 26px; height: 26px;
+  border-radius: 999px;
+  background: var(--cursor);
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width .25s var(--ease), height .25s var(--ease), background .25s var(--ease), opacity .2s linear;
+  will-change: transform;
+  opacity: 0;
+}
+.kev-cursor.is-ready { opacity: 1; }
+.kev-cursor.is-hot { width: 54px; height: 54px; background: rgba(13,13,13,0.10); }
+@media (hover: none), (pointer: coarse) { .kev-cursor { display: none; } }
+
+/* ---- Media frame (photo/video placeholder) ---- */
+.frame {
+  position: relative;
+  background: var(--frame);
+  overflow: hidden;
+  display: block;
+}
+/* faint cinematic film grain over every frame */
+.frame::after {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: .07;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.frame__label {
+  position: absolute; left: 12px; bottom: 11px;
+  font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(0,0,0,.42);
+  z-index: 2;
+}
+.frame--dark { background: var(--frame-dark); }
+.frame--dark .frame__label { color: rgba(255,255,255,.45); }
+
+/* fade-in primitive (hover/interaction-triggered only) */
+.fade-in { animation: kevFade var(--t-film) var(--ease-io) both; }
+@keyframes kevFade { from { opacity: 0; } to { opacity: 1; } }
+
+/* rise-in: base state is VISIBLE; hidden only until .is-ready is set by JS.
+   This guarantees content is never stuck invisible if the timeline is paused. */
+.rise-in { transition: opacity .6s var(--ease), transform .6s var(--ease); }
+@media (prefers-reduced-motion: no-preference) {
+  .kev-app:not(.is-ready) .rise-in { opacity: 0; transform: translateY(14px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { animation: none !important; }
+  .rise-in { transition: none !important; }
+}
+
+::selection { background: var(--accent); color: #fff; }
+
+/* thin scrollbar, muted */
+* { scrollbar-width: thin; scrollbar-color: var(--ink-3) transparent; }

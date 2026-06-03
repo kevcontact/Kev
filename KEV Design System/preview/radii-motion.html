@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { padding: 26px 34px; display:flex; gap:40px; align-items:center; }
+  .col { display:flex; flex-direction:column; gap:12px; }
+  .ttl { font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--fg3); }
+  .radii { display:flex; gap:16px; align-items:flex-end; }
+  .rc { display:flex; flex-direction:column; align-items:center; gap:7px; }
+  .box { width:52px; height:52px; background:var(--ink); }
+  .rl { font-size:11px; color:var(--fg2); }
+  .moto { font-size:13px; color:var(--fg1); font-weight:600; }
+  .msub { font-size:11px; color:var(--fg2); }
+</style>
+</head>
+<body>
+  <div class="col">
+    <span class="ttl">Radii — editorial = square</span>
+    <div class="radii">
+      <div class="rc"><div class="box" style="border-radius:0"></div><span class="rl">0 · default</span></div>
+      <div class="rc"><div class="box" style="border-radius:2px"></div><span class="rl">2 · tag</span></div>
+      <div class="rc"><div class="box" style="border-radius:999px"></div><span class="rl">∞ · dot</span></div>
+    </div>
+  </div>
+  <div class="col">
+    <span class="ttl">Motion</span>
+    <span class="moto">Quiet · filmic cross-fades</span>
+    <span class="msub">900ms film · 320ms base · ease-out, no bounce, no shadow scale</span>
+  </div>
+</body>
+</html>

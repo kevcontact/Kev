@@ -1,0 +1,231 @@
+/* ============================================================
+   KEV — Foundations: Color + Type
+   Photographer & music-video director portfolio.
+   "The container stays mute; the imagery does the talking."
+   ============================================================ */
+
+/* --- Webfont anchor ---------------------------------------------------------
+   Brand face is Helvetica Now Display / Neue Haas Grotesk (licensed).
+   We prefer REAL Helvetica on the system (most KEV viewers + the studio are
+   on macOS) and load Archivo as the cross-platform free neo-grotesque so
+   Windows/Linux/preview still see a faithful, metric-similar grotesque.
+   ⚠ SUBSTITUTION: swap Archivo for licensed Helvetica Now / Neue Haas Grotesk
+   web fonts in production — drop the .woff2 files in /fonts and update --font. */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  /* ---------- TYPE FAMILY ---------- */
+  --font: "Helvetica Now Display", "Neue Haas Grotesk Display Pro",
+          "Helvetica Neue", Helvetica, "Archivo", Arial, sans-serif;
+
+  /* ---------- COLOR — base tokens ---------- */
+  --paper:      #FFFFFF;   /* the one and only background */
+  --ink:        #0D0D0D;   /* near-black — primary text */
+  --ink-2:      #8A8A8A;   /* mid-gray — secondary labels, client names */
+  --ink-3:      #BDBDBD;   /* light gray — tertiary, inactive, counters */
+  --hair:       #ECECEC;   /* hairline rules / dividers */
+  --tick:       #D6D6D6;   /* film-strip ruler tick marks */
+  --accent:     #FF4D17;   /* the SINGLE accent — orange client tags only */
+
+  /* image placeholders (real photos/videos replace these) */
+  --frame:      #ECECEC;   /* light placeholder fill */
+  --frame-dark: #131313;   /* dark placeholder fill (video) */
+
+  /* custom cursor */
+  --cursor:     rgba(13,13,13,0.16); /* soft gray follow-circle */
+
+  /* ---------- SEMANTIC COLOR ---------- */
+  --bg:          var(--paper);
+  --fg1:         var(--ink);     /* primary foreground */
+  --fg2:         var(--ink-2);   /* secondary foreground */
+  --fg3:         var(--ink-3);   /* tertiary foreground */
+  --rule:        var(--hair);
+
+  /* ---------- TYPE — weights ---------- */
+  --w-regular:  400;
+  --w-medium:   500;
+  --w-semibold: 600;
+  --w-bold:     700;
+  --w-heavy:    800;   /* the wordmark + hero menu weight */
+
+  /* ---------- TYPE — fluid scale (mobile-first, clamp) ----------
+     Editorial: big, bold, generous line-height, tight tracking on display. */
+  --fs-mega:   clamp(2.75rem, min(15vw, 16vh), 8rem); /* home menu — height-aware */
+  --fs-display:clamp(2.5rem, 9vw, 6rem);       /* project titles             */
+  --fs-h1:     clamp(2rem, 6vw, 3.5rem);       /* section heads              */
+  --fs-h2:     clamp(1.5rem, 4vw, 2.25rem);    /* video titles, sub-heads    */
+  --fs-h3:     clamp(1.125rem, 2.4vw, 1.5rem); /* list items                 */
+  --fs-body:   clamp(1rem, 1.4vw, 1.125rem);   /* running text               */
+  --fs-label:  0.8125rem;                       /* nav, toggles, controls     */
+  --fs-tag:    0.6875rem;                        /* orange client tags         */
+  --fs-counter:0.875rem;                         /* 05 / 34                    */
+
+  /* ---------- TYPE — line-height ---------- */
+  --lh-tight:  0.98;   /* mega display                */
+  --lh-snug:   1.06;   /* titles                      */
+  --lh-head:   1.18;   /* sub-heads / list            */
+  --lh-body:   1.55;   /* running text (generous)     */
+
+  /* ---------- TYPE — tracking ---------- */
+  --ls-mega:   -0.03em;
+  --ls-display:-0.025em;
+  --ls-head:   -0.015em;
+  --ls-body:   0em;
+  --ls-label:  0.04em;    /* small UI labels, slight positive */
+  --ls-caps:   0.12em;    /* uppercase micro labels / tags     */
+
+  /* ---------- SPACING (4px base, editorial macro steps) ---------- */
+  --s-1:  4px;
+  --s-2:  8px;
+  --s-3:  12px;
+  --s-4:  16px;
+  --s-5:  24px;
+  --s-6:  32px;
+  --s-7:  48px;
+  --s-8:  64px;
+  --s-9:  96px;
+  --s-10: 128px;
+  --s-11: 192px;   /* full-bleed vertical breathing room */
+
+  /* gutters / page frame */
+  --pad-x:      clamp(20px, 6vw, 64px);  /* horizontal page margin */
+  --header-h:   56px;
+  --maxw:       1600px;
+
+  /* ---------- RADII — minimal. Editorial = square. ---------- */
+  --r-0: 0px;       /* default: everything is square           */
+  --r-sm: 2px;      /* the orange client tag, barely-there      */
+  --r-pill: 999px;  /* cursor circle / dot only                 */
+
+  /* ---------- MOTION — quiet, filmic. No bounce. ---------- */
+  --ease:      cubic-bezier(0.22, 1, 0.36, 1);   /* soft ease-out */
+  --ease-io:   cubic-bezier(0.65, 0, 0.35, 1);   /* fades         */
+  --t-fast:    180ms;
+  --t-base:    320ms;
+  --t-slow:    600ms;
+  --t-film:    900ms;   /* image/video cross-fades */
+}
+
+/* ============================================================
+   ELEMENT DEFAULTS — semantic mappings
+   ============================================================ */
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg1);
+  font-family: var(--font);
+  font-weight: var(--w-regular);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  letter-spacing: var(--ls-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---- DISPLAY: home menu words ---- */
+.kev-mega {
+  font-size: var(--fs-mega);
+  font-weight: var(--w-heavy);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-mega);
+}
+
+/* ---- DISPLAY: project / overview titles ---- */
+.kev-display, h1 {
+  font-size: var(--fs-display);
+  font-weight: var(--w-heavy);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-display);
+  margin: 0;
+}
+
+h2 {
+  font-size: var(--fs-h1);
+  font-weight: var(--w-bold);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-head);
+  margin: 0;
+}
+
+h3 {
+  font-size: var(--fs-h2);
+  font-weight: var(--w-bold);
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-head);
+  margin: 0;
+}
+
+p { margin: 0 0 1em; max-width: 60ch; text-wrap: pretty; }
+
+a { color: inherit; text-decoration: none; }
+
+/* ---- LABEL: nav items, toggles, text controls ---- */
+.kev-label {
+  font-size: var(--fs-label);
+  font-weight: var(--w-medium);
+  letter-spacing: var(--ls-label);
+  line-height: 1;
+}
+
+/* ---- MICRO CAPS: uppercase wayfinding ---- */
+.kev-caps {
+  font-size: var(--fs-label);
+  font-weight: var(--w-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-caps);
+  line-height: 1;
+}
+
+/* ---- SECONDARY: client names under titles ---- */
+.kev-sub {
+  font-size: var(--fs-body);
+  font-weight: var(--w-regular);
+  color: var(--fg2);
+  letter-spacing: 0;
+}
+
+/* ---- COUNTER: 05 / 34 ---- */
+.kev-counter {
+  font-size: var(--fs-counter);
+  font-weight: var(--w-medium);
+  color: var(--fg2);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+/* ---- ORANGE CLIENT TAG — the only color the UI itself emits ---- */
+.kev-tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--fs-tag);
+  font-weight: var(--w-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-caps);
+  color: var(--accent);
+  line-height: 1;
+}
+.kev-tag--solid {
+  color: var(--paper);
+  background: var(--accent);
+  padding: 4px 7px 3px;
+  border-radius: var(--r-sm);
+}
+
+/* ---- FILM-STRIP RULER: row of thin vertical ticks ---- */
+.kev-ticks {
+  --tick-gap: 9px;
+  --tick-h: 9px;
+  height: var(--tick-h);
+  flex: 1;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--tick) 0, var(--tick) 1px,
+    transparent 1px, transparent var(--tick-gap)
+  );
+}

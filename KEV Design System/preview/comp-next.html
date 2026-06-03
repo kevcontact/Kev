@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { padding: 0; height:150px; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:8px; padding-left:40px; }
+  .lead { font-size:12px; color:var(--fg2); letter-spacing:.04em; }
+  .nav { font-size:30px; font-weight:800; letter-spacing:-.02em; transition:color .2s; }
+  .nav:hover { color:var(--accent); }
+  .arrow { display:inline-block; transition:transform .25s var(--ease); }
+  .nav:hover .arrow { transform:translateX(8px); }
+</style>
+</head>
+<body>
+  <span class="lead">End of project</span>
+  <a class="nav" href="#">View <span class="arrow">→</span> Maisak: Capsule</a>
+</body>
+</html>

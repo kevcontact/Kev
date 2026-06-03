@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { padding: 26px 34px; }
+  .row { display:flex; gap:14px; align-items:flex-end; }
+  .sw { flex:1; }
+  .chip { height:74px; border:1px solid var(--hair); }
+  .name { font-size:12px; font-weight:600; margin-top:9px; }
+  .hex { font-size:11px; color:var(--fg2); letter-spacing:.03em; }
+  .note { margin-top:16px; font-size:12px; color:var(--fg2); }
+  .note b { color:var(--accent); }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="sw"><div class="chip" style="background:var(--accent)"></div><div class="name">Accent</div><div class="hex">#FF4D17 · --accent</div></div>
+    <div class="sw"><div class="chip" style="background:var(--hair)"></div><div class="name">Hairline</div><div class="hex">#ECECEC · --hair</div></div>
+    <div class="sw"><div class="chip" style="background:var(--tick)"></div><div class="name">Tick</div><div class="hex">#D6D6D6 · --tick</div></div>
+  </div>
+  <div class="note">The <b>single</b> accent. Used only on small client tags &amp; <span style="color:var(--accent)">View →</span> hover — never as a field.</div>
+</body>
+</html>

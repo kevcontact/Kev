@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { padding: 0; }
+  .player { background:var(--frame-dark); padding:18px 22px; display:flex; flex-direction:column; gap:14px; }
+  .controls { display:flex; align-items:center; gap:22px; color:#fff; }
+  .ctl { font-size:13px; font-weight:500; letter-spacing:.02em; }
+  .tc { font-size:13px; color:#8a8a8a; font-variant-numeric:tabular-nums; margin-left:auto; }
+  .prog { height:2px; background:rgba(255,255,255,.22); position:relative; }
+  .prog::after { content:""; position:absolute; left:0; top:0; bottom:0; width:34%; background:#fff; }
+  .cap { padding:14px 22px; font-size:11px; color:var(--fg2); }
+</style>
+</head>
+<body>
+  <div class="player">
+    <div class="controls">
+      <span class="ctl">Pause</span>
+      <span class="ctl">Unmute</span>
+      <span class="tc">0:42 / 3:18</span>
+    </div>
+    <div class="prog"></div>
+  </div>
+  <div class="cap">Text-only video controls · autoplay muted · thin progress bar</div>
+</body>
+</html>

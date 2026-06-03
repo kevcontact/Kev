@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { padding: 22px 34px; }
+  .menu { display:flex; flex-direction:column; gap:2px; }
+  .item { font-size:34px; font-weight:800; letter-spacing:-.025em; line-height:1.15; color:var(--ink); transition:opacity .2s; }
+  .menu:hover .item { opacity:.32; }
+  .menu .item:hover { opacity:1; }
+</style>
+</head>
+<body>
+  <nav class="menu">
+    <span class="item">Photography</span>
+    <span class="item">Overview</span>
+    <span class="item">Video</span>
+    <span class="item">Information</span>
+  </nav>
+</body>
+</html>
