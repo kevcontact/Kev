@@ -6,12 +6,23 @@ import { useEffect, useRef, useState } from 'react'
 import { KEV_MENU } from '@/lib/nav'
 import { MenuList } from '@/components/MenuList'
 
-/** Persistent header (wordmark · film-strip ruler · Menu) + full-screen menu overlay. */
+/** Persistent header (wordmark · film-strip ruler · Menu) + slide-in menu panel.
+ *  The panel slides left→right over a transparent dark scrim so the page
+ *  underneath stays visible. Hidden until the Menu button is pressed. */
 export function Header() {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
   const toggleRef = useRef<HTMLButtonElement>(null)
   const overlayRef = useRef<HTMLDivElement>(null)
+
+  // dark fields: Home, Video, the darkroom index (Photography/Overview) and
+  // any project page (the chapter sits at top). While the menu is open the
+  // scrim is dark — the header reads on-dark too.
+  const onDark =
+    pathname === '/' ||
+    pathname === '/video' ||
+    pathname === '/photography' ||
+    pathname.startsWith('/work')
 
   // close the overlay on navigation
   useEffect(() => {
@@ -63,7 +74,7 @@ export function Header() {
 
   return (
     <>
-      <header className="kev-header">
+      <header className={'kev-header' + (onDark || menuOpen ? ' is-dark' : '')}>
         <Link href="/" className="kev-header__mark" aria-label="KEV — home">
           Kev.
         </Link>
@@ -80,20 +91,19 @@ export function Header() {
         </button>
       </header>
 
-      {menuOpen && (
-        <div
-          ref={overlayRef}
-          className="kev-overlay fade-in"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Menu"
-          onClick={() => setMenuOpen(false)}
-        >
-          <div className="kev-overlay__inner" onClick={(e) => e.stopPropagation()}>
-            <MenuList current={current} onNavigate={() => setMenuOpen(false)} />
-          </div>
+      <div
+        ref={overlayRef}
+        className={'kev-overlay' + (menuOpen ? ' is-open' : '')}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu"
+        aria-hidden={!menuOpen}
+        onClick={() => setMenuOpen(false)}
+      >
+        <div className="kev-overlay__inner" onClick={(e) => e.stopPropagation()}>
+          <MenuList current={current} onNavigate={() => setMenuOpen(false)} />
         </div>
-      )}
+      </div>
     </>
   )
 }

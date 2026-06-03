@@ -3,11 +3,21 @@ import { info } from '@/lib/data'
 
 export const metadata: Metadata = { title: 'Information — KEV' }
 
-/** Information — terse bio, clients, services, contact. */
+/** Information — terse bio (fine weight), clients, services, contact; scattered K·E·V. */
 export default function InformationPage() {
+  // SYNTHESIS §2 bans em dashes in copy. lib/data.ts is untouchable, so we
+  // normalize the em dash to a middot at render time only (no data mutation).
+  const bio = info.bio.replace(/\s+—\s+/g, ' · ')
+
   return (
     <section className="kev-info">
-      <h1 className="kev-info__lead rise-in">{info.bio}</h1>
+      <div className="kev-scatter" aria-hidden="true">
+        <span className="k">K</span>
+        <span className="e">E</span>
+        <span className="v">V</span>
+      </div>
+
+      <h1 className="kev-info__lead rise-in">{bio}</h1>
 
       <div className="kev-info__cols">
         <div className="kev-info__col">
@@ -38,6 +48,10 @@ export default function InformationPage() {
           </ul>
         </div>
       </div>
+
+      <span className="kev-paren kev-counter kev-info__sign">
+        Available for commissions, 2026
+      </span>
     </section>
   )
 }

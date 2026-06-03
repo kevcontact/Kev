@@ -21,6 +21,10 @@ export function Cursor() {
       const target = e.target as Element | null
       const hot = target?.closest?.('a, button, [data-hot]')
       dot.classList.toggle('is-hot', !!hot)
+      const onDark = target?.closest?.(
+        '.kev-bleed:not(.kev-bleed--paper), .kev-videos--dark, .kev-info--dark',
+      )
+      dot.classList.toggle('on-dark', !!onDark)
     }
 
     const loop = () => {
