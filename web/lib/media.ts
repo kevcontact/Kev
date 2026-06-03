@@ -7,4 +7,6 @@
  */
 export const MEDIA_BASE = process.env.NEXT_PUBLIC_MEDIA_BASE ?? '/media'
 
-export const mediaUrl = (path: string): string => `${MEDIA_BASE}/${path}`
+/** Encode each segment — defends against future filenames with spaces/#/?/% */
+export const mediaUrl = (path: string): string =>
+  `${MEDIA_BASE}/${path.split('/').map(encodeURIComponent).join('/')}`

@@ -11,6 +11,8 @@ export function Cursor() {
   useEffect(() => {
     const dot = dotRef.current
     if (!dot) return
+    // coarse pointers hide the cursor (CSS) — skip listeners + rAF entirely
+    if (window.matchMedia('(hover: none), (pointer: coarse)').matches) return
     let raf = 0
 
     const onMove = (e: MouseEvent) => {
@@ -28,10 +30,18 @@ export function Cursor() {
       raf = requestAnimationFrame(loop)
     }
 
+    // pause the loop while the tab is hidden
+    const onVisibility = () => {
+      cancelAnimationFrame(raf)
+      if (!document.hidden) raf = requestAnimationFrame(loop)
+    }
+
     window.addEventListener('mousemove', onMove)
+    document.addEventListener('visibilitychange', onVisibility)
     raf = requestAnimationFrame(loop)
     return () => {
       window.removeEventListener('mousemove', onMove)
+      document.removeEventListener('visibilitychange', onVisibility)
       cancelAnimationFrame(raf)
     }
   }, [])

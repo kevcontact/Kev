@@ -76,6 +76,9 @@ function photoProject(p: {
   blurb?: string
 }): Project {
   const items = photoItems(p.dir)
+  // fail at build time (generateStaticParams) instead of rendering a broken page
+  if (items.length === 0)
+    throw new Error(`No media found in manifest for project dir: ${p.dir}`)
   return {
     slug: p.slug,
     title: p.title,
