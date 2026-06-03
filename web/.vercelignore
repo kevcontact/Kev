@@ -1,0 +1,2 @@
+# media local via symlink — en producción viene de Supabase (NEXT_PUBLIC_MEDIA_BASE)
+public/media
