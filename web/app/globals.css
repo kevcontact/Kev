@@ -399,6 +399,36 @@ a { color: inherit; text-decoration: none; }
   .kev-work__panel > img, .kev-work__panel > video { animation: none; }
 }
 
+/* MOBILE — stack the row in two lines so long titles never collide with the
+   client tag + year. Title on top; a quiet meta line (tag · year) below.
+   Tighter rhythm so more projects fit, more editorial-contact-sheet less heavy. */
+@media (max-width: 640px) {
+  .kev-work { padding: calc(var(--header-h) + 4vh) var(--pad-x) 7vh; }
+  .kev-work__head { margin-bottom: clamp(20px, 4vh, 40px); }
+  .kev-work__row {
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 10px;
+    row-gap: 4px;
+    padding: 15px 0;
+  }
+  .kev-work__name {
+    flex: 1 0 100%;            /* title always owns its own line */
+    font-size: 1.5rem;
+    line-height: 1.1;
+  }
+  .kev-work__tag {
+    transform: none;
+    order: 1;
+    font-size: var(--fs-tag);
+  }
+  .kev-work__year {
+    margin-left: auto;          /* push year to the far right of the meta line */
+    order: 2;
+    flex: none;
+  }
+}
+
 /* ============================================================
    PROJECT — Gallery / Overview
    ============================================================ */
@@ -493,8 +523,24 @@ a { color: inherit; text-decoration: none; }
 .kev-overview-grid__cell .frame > video { height: auto; }
 .kev-overview-grid__tag { position: absolute; top: 10px; left: 10px; z-index: 3; }
 @media (max-width: 1100px) { .kev-overview-grid { columns: 3; } }
-@media (max-width: 760px)  { .kev-overview-grid { columns: 2; } }
-@media (max-width: 460px)  { .kev-overview-grid { columns: 1; } }
+@media (max-width: 760px)  { .kev-overview-grid { columns: 3; } }
+/* MOBILE — compact contact-sheet (3 thin columns, small gap) instead of one
+   giant column. Reads as an overview, not a vertical gallery. Tags shrink so
+   they stay a discreet corner mark on the small thumbnails. */
+@media (max-width: 460px) {
+  .kev-overview-grid {
+    columns: 3;
+    column-gap: 6px;
+    padding-top: 14px;
+  }
+  .kev-overview-grid__cell { margin-bottom: 6px; }
+  .kev-overview-grid__tag { top: 5px; left: 5px; }
+  .kev-overview-grid__tag.kev-tag--solid {
+    font-size: 0.5rem;
+    letter-spacing: 0.06em;
+    padding: 2px 4px 1px;
+  }
+}
 
 .kev-next {
   border-top: 1px solid var(--hair); margin-top: 6vh;
