@@ -6,67 +6,101 @@ import { Media } from '@/components/Media'
 import { Crosshair } from '@/components/Crosshair'
 import type { Project } from '@/lib/data'
 
-/** One large centered media per scroll; reports which is nearest viewport-center. */
-function GalleryView({
+/** Horizontal rail — one photo at a time, sliding right (scroll-snap).
+ *  Reports the real 1-based index of the slide in view. Ends with View → next. */
+function GalleryRail({
   project,
+  next,
   onCount,
 }: {
   project: Project
+  next: Project
   onCount: (n: number) => void
 }) {
-  const refs = useRef<(HTMLDivElement | null)[]>([])
+  const trackRef = useRef<HTMLDivElement>(null)
 
+  // real counter driven by horizontal scroll position
   useEffect(() => {
+    const track = trackRef.current
+    if (!track) return
     let raf: number | null = null
+
     const calc = () => {
       raf = null
-      const mid = window.innerHeight / 2
-      let best = 0
-      let bestD = Infinity
-      refs.current.forEach((el, i) => {
-        if (!el) return
-        const r = el.getBoundingClientRect()
-        const d = Math.abs((r.top + r.bottom) / 2 - mid)
-        if (d < bestD) {
-          bestD = d
-          best = i
-        }
-      })
-      onCount(best + 1)
+      const w = track.clientWidth
+      if (!w) return
+      const i = Math.round(track.scrollLeft / w)
+      onCount(Math.min(i + 1, project.items.length))
     }
     const onScroll = () => {
       if (raf === null) raf = requestAnimationFrame(calc)
     }
+
+    // desktop: translate vertical wheel into one-slide horizontal steps
+    let wheelLock = false
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return // native horizontal scroll
+      e.preventDefault()
+      if (wheelLock || Math.abs(e.deltaY) < 8) return
+      wheelLock = true
+      const w = track.clientWidth
+      const idx = Math.round(track.scrollLeft / w)
+      const dir = e.deltaY > 0 ? 1 : -1
+      track.scrollTo({ left: (idx + dir) * w, behavior: 'smooth' })
+      setTimeout(() => {
+        wheelLock = false
+      }, 420)
+    }
+
     calc()
-    window.addEventListener('scroll', onScroll, { passive: true })
+    track.addEventListener('scroll', onScroll, { passive: true })
+    track.addEventListener('wheel', onWheel, { passive: false })
     window.addEventListener('resize', onScroll)
     return () => {
-      window.removeEventListener('scroll', onScroll)
+      track.removeEventListener('scroll', onScroll)
+      track.removeEventListener('wheel', onWheel)
       window.removeEventListener('resize', onScroll)
       if (raf !== null) cancelAnimationFrame(raf)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project.slug])
 
+  // click right half → next slide, left half → previous
+  const step = (e: React.MouseEvent<HTMLDivElement>) => {
+    const track = trackRef.current
+    if (!track) return
+    const w = track.clientWidth
+    const idx = Math.round(track.scrollLeft / w)
+    const dir = e.clientX > window.innerWidth / 2 ? 1 : -1
+    track.scrollTo({
+      left: Math.max(0, idx + dir) * w,
+      behavior: 'smooth',
+    })
+  }
+
   return (
-    <div className="kev-gallery">
+    <div className="kev-gallery kev-gallery--rail" ref={trackRef}>
       {project.items.map((item, i) => (
-        <div
-          className="kev-gallery__slot"
-          key={item.src}
-          ref={(el) => {
-            refs.current[i] = el
-          }}
-        >
+        <div className="kev-gallery__slide" key={item.src} onClick={step}>
           <Media
             item={item}
             alt={`${project.title} — ${String(i + 1).padStart(2, '0')}`}
             className="kev-gallery__img"
             style={{ aspectRatio: 'auto' }}
-            loading={i < 2 ? 'eager' : 'lazy'}
+            loading={i < 3 ? 'eager' : 'lazy'}
           />
         </div>
       ))}
+
+      <div className="kev-gallery__slide kev-gallery__slide--next">
+        <span className="kev-caps kev-next__lead">Next project</span>
+        <Link href={`/work/${next.slug}`} className="kev-next__link">
+          View <span className="kev-next__arrow">→</span> {next.title}
+        </Link>
+        <span className="kev-sub kev-next__client">
+          {next.client} · {next.year}
+        </span>
+      </div>
     </div>
   )
 }
@@ -102,12 +136,23 @@ export function ProjectView({
 }) {
   const [view, setView] = useState<'gallery' | 'overview'>('gallery')
   const [count, setCount] = useState(1)
+  const stageRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setView('gallery')
     setCount(1)
     window.scrollTo(0, 0)
   }, [project.slug])
+
+  const pick = (v: 'gallery' | 'overview') => {
+    setView(v)
+    if (v === 'gallery') {
+      // pin the viewport to the rail — photos slide right, the page stays put
+      requestAnimationFrame(() => {
+        stageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      })
+    }
+  }
 
   return (
     <section className="kev-project" style={{ paddingTop: 'var(--header-h)' }}>
@@ -136,43 +181,48 @@ export function ProjectView({
         <div className="kev-project__toggle" role="tablist">
           <button
             className={'kev-seg' + (view === 'gallery' ? ' is-on' : '')}
-            onClick={() => setView('gallery')}
+            onClick={() => pick('gallery')}
           >
             Gallery
           </button>
           <button
             className={'kev-seg' + (view === 'overview' ? ' is-on' : '')}
-            onClick={() => setView('overview')}
+            onClick={() => pick('overview')}
           >
             Overview
           </button>
         </div>
       </div>
 
-      <div className="kev-project__stage">
+      <div className="kev-project__stage" ref={stageRef}>
         {view === 'gallery' ? (
-          <GalleryView project={project} onCount={setCount} />
+          <GalleryRail project={project} next={next} onCount={setCount} />
         ) : (
           <OverviewView project={project} />
         )}
       </div>
 
       {view === 'gallery' && (
-        <div className="kev-project__counter kev-counter">
-          {String(count).padStart(2, '0')} /{' '}
-          {String(project.items.length).padStart(2, '0')}
+        <div className="kev-project__counter">
+          <span className="kev-counter">
+            {String(count).padStart(2, '0')} /{' '}
+            {String(project.items.length).padStart(2, '0')}
+          </span>
+          <span className="kev-project__counter-title">{project.title}</span>
         </div>
       )}
 
-      <div className="kev-next">
-        <span className="kev-caps kev-next__lead">Next project</span>
-        <Link href={`/work/${next.slug}`} className="kev-next__link">
-          View <span className="kev-next__arrow">→</span> {next.title}
-        </Link>
-        <span className="kev-sub kev-next__client">
-          {next.client} · {next.year}
-        </span>
-      </div>
+      {view === 'overview' && (
+        <div className="kev-next">
+          <span className="kev-caps kev-next__lead">Next project</span>
+          <Link href={`/work/${next.slug}`} className="kev-next__link">
+            View <span className="kev-next__arrow">→</span> {next.title}
+          </Link>
+          <span className="kev-sub kev-next__client">
+            {next.client} · {next.year}
+          </span>
+        </div>
+      )}
     </section>
   )
 }

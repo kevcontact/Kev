@@ -420,24 +420,67 @@ a { color: inherit; text-decoration: none; }
 .kev-seg.is-on { color: var(--ink); border-bottom-color: var(--ink); }
 .kev-seg:hover { color: var(--ink); }
 
+/* counter — centered at the bottom, real index + project title (reference:
+   "2/20 / Timothée Chalamet"). Updates as the rail slides right. */
 .kev-project__counter {
-  position: fixed; left: var(--pad-x); bottom: 26px; z-index: 120;
-  background: var(--paper); padding: 6px 10px 6px 0;
+  position: fixed; left: 50%; transform: translateX(-50%);
+  bottom: 16px; z-index: 120;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  text-align: center; pointer-events: none;
+}
+.kev-project__counter-title {
+  font-size: var(--fs-label);
+  font-weight: var(--w-bold);
+  letter-spacing: var(--ls-head);
+  color: var(--ink);
 }
 
-.kev-gallery { padding-top: 4vh; }
-.kev-gallery__slot {
-  min-height: 88vh; display: flex; align-items: center; justify-content: center;
-  padding: 2vh 0;
+/* GALLERY — horizontal rail: photos slide RIGHT, one per view (scroll-snap).
+   No vertical scrolling inside the gallery. */
+.kev-project__stage { scroll-margin-top: calc(var(--header-h) + 86px); }
+.kev-gallery--rail {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  height: calc(100dvh - var(--header-h) - 96px);
+  margin: 0 calc(var(--pad-x) * -1);
+}
+.kev-gallery--rail::-webkit-scrollbar { display: none; }
+.kev-gallery__slide {
+  flex: 0 0 100%;
+  min-width: 100%;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  display: flex; align-items: center; justify-content: center;
+  padding: 2vh var(--pad-x) 10vh;
 }
 .kev-gallery__img {
-  max-height: 80vh; max-width: min(92vw, 1100px);
+  max-height: 100%;
 }
 .kev-gallery__img > img,
 .kev-gallery__img > video {
-  max-height: 80vh; max-width: min(92vw, 1100px);
+  max-height: calc(100dvh - var(--header-h) - 96px - 12vh);
+  max-width: min(86vw, 1100px);
   width: auto; height: auto;
   object-fit: contain;
+}
+/* final slide: View → next project, centered */
+.kev-gallery__slide--next {
+  flex-direction: column; gap: 14px;
+  align-items: flex-start; justify-content: center;
+  padding-left: calc(var(--pad-x) * 2);
+}
+@media (max-width: 640px) {
+  /* bar wraps to two lines on mobile — rail gets a bit less height */
+  .kev-project__stage { scroll-margin-top: calc(var(--header-h) + 122px); }
+  .kev-gallery--rail { height: calc(100dvh - var(--header-h) - 132px); }
+  .kev-gallery__img > img,
+  .kev-gallery__img > video {
+    max-height: calc(100dvh - var(--header-h) - 132px - 11vh);
+  }
 }
 
 .kev-overview-grid {
