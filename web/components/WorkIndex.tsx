@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { Media } from '@/components/Media'
+import { Crosshair } from '@/components/Crosshair'
 import type { Project } from '@/lib/data'
 
 /** Long text list; hovering a line reveals a muted media preview (desktop). */
@@ -49,7 +50,9 @@ export function WorkIndex({
               item={active.cover}
               className="fade-in kev-work__panel"
               style={{ aspectRatio: 'auto' }}
-            />
+            >
+              <Crosshair tone="dark" />
+            </Media>
           )}
         </div>
       </div>

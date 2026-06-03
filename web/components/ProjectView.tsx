@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { Media } from '@/components/Media'
+import { Crosshair } from '@/components/Crosshair'
 import type { Project } from '@/lib/data'
 
 /** One large centered media per scroll; reports which is nearest viewport-center. */
@@ -110,6 +111,21 @@ export function ProjectView({
 
   return (
     <section className="kev-project" style={{ paddingTop: 'var(--header-h)' }}>
+      <header className="kev-chapter kev-bleed">
+        <div className="kev-bleed__bg">
+          <Media item={project.cover} alt="" loading="eager" />
+        </div>
+        <div className="kev-bleed__scrim" aria-hidden="true" />
+        <Crosshair tone="dark" />
+        <h1 className="kev-bleed__tl kev-atmos fade-in">{project.title}</h1>
+        <div className="kev-bleed__bl">
+          <span className="kev-chapter__divider" aria-hidden="true" />
+          <span className="kev-counter" style={{ color: 'var(--ink-on-dark-2)' }}>
+            {project.client} · {project.year}
+          </span>
+        </div>
+      </header>
+
       <div className="kev-project__bar">
         <div className="kev-project__id">
           <h1 className="kev-project__title">{project.title}</h1>

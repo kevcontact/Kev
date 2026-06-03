@@ -11,6 +11,10 @@ export function Header() {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
 
+  // dark fields: Home, Video, and any project page (the chapter sits at top)
+  const onDark =
+    pathname === '/' || pathname === '/video' || pathname.startsWith('/work/')
+
   // close the overlay on navigation
   useEffect(() => {
     setMenuOpen(false)
@@ -24,7 +28,7 @@ export function Header() {
 
   return (
     <>
-      <header className="kev-header">
+      <header className={'kev-header' + (onDark && !menuOpen ? ' is-dark' : '')}>
         <Link href="/" className="kev-header__mark" aria-label="KEV — home">
           Kev.
         </Link>
