@@ -288,12 +288,41 @@ a { color: inherit; text-decoration: none; }
   transition: opacity .18s var(--ease);
 }
 .kev-header__menu:hover { opacity: .5; }
+/* Menu panel — hidden by default; slides in left→right over a transparent
+   dark scrim so the page underneath stays visible (Numinous: see-through). */
 .kev-overlay {
-  position: fixed; inset: 0; z-index: 150; background: var(--paper);
+  position: fixed; inset: 0; z-index: 150;
+  background: linear-gradient(
+    to right,
+    rgba(13, 13, 13, 0.78) 0%,
+    rgba(13, 13, 13, 0.48) 55%,
+    rgba(13, 13, 13, 0.22) 100%
+  );
+  transform: translateX(-100%);
+  visibility: hidden;
+  transition:
+    transform var(--t-slow) var(--ease),
+    visibility 0s linear var(--t-slow);
+}
+.kev-overlay.is-open {
+  transform: translateX(0);
+  visibility: visible;
+  transition: transform var(--t-slow) var(--ease);
 }
 .kev-overlay__inner {
   position: absolute; left: var(--pad-x); bottom: clamp(48px, 12vh, 120px);
   right: var(--pad-x);
+}
+/* the menu words read on-dark over the scrim — fine weight, as the reference */
+.kev-overlay .kev-menulist__item {
+  color: var(--ink-on-dark);
+  font-size: var(--fs-h1);
+  font-weight: var(--w-regular);
+  line-height: 1.6;
+  letter-spacing: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .kev-overlay, .kev-overlay.is-open { transition: none; }
 }
 
 .kev-menulist { display: flex; flex-direction: column; align-items: flex-start; }
@@ -735,3 +764,47 @@ a { color: inherit; text-decoration: none; }
 .kev-cursor.is-hot::before, .kev-cursor.is-hot::after { opacity: .45; }
 .kev-cursor.on-dark { background: var(--cursor-on-dark); color: var(--ink-on-dark); }
 .kev-cursor.on-dark.is-hot { background: rgba(242,239,234,0.12); }
+
+/* ============================================================
+   WORK INDEX — darkroom (las vibes del Home en Photography/Overview)
+   Lista sobre campo oscuro; el hover inunda el fondo con el cover
+   del proyecto, full-bleed, detrás de un scrim lateral.
+   ============================================================ */
+.kev-work--dark {
+  position: relative; overflow: hidden;
+  background: var(--field-dark); color: var(--ink-on-dark);
+}
+.kev-work--dark .kev-work__bg { position: absolute; inset: 0; z-index: 0; }
+.kev-work--dark .kev-work__bg .frame {
+  width: 100%; height: 100%; aspect-ratio: auto !important;
+  background: var(--field-dark);
+}
+.kev-work--dark .kev-work__bg .frame > img,
+.kev-work--dark .kev-work__bg .frame > video {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.kev-work__scrim {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(
+    to right,
+    rgba(13, 13, 13, 0.80) 0%,
+    rgba(13, 13, 13, 0.46) 55%,
+    rgba(13, 13, 13, 0.24) 100%
+  );
+}
+.kev-work--dark .kev-work__head,
+.kev-work--dark .kev-work__body { position: relative; z-index: 5; }
+.kev-work--dark .kev-work__head .kev-counter { color: var(--ink-on-dark-2); }
+.kev-work--dark .kev-work__row { border-bottom-color: var(--hair-on-dark); }
+.kev-work--dark .kev-work__name {
+  color: var(--ink-on-dark);
+  font-weight: var(--w-regular);
+  letter-spacing: 0;
+}
+/* sin naranja-texto sobre oscuro (regla Darkroom): cliente y año neutros */
+.kev-work--dark .kev-work__tag { color: var(--ink-on-dark-2); }
+.kev-work--dark .kev-work__year { color: var(--ink-on-dark-2); }
+/* el preview-panel derecho del v1 no existe aquí: el fondo es el preview */
+@media (min-width: 880px) {
+  .kev-work--dark .kev-work__list { width: 60%; }
+}

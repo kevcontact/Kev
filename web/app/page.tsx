@@ -1,10 +1,9 @@
-import { MenuList } from '@/components/MenuList'
 import { Media } from '@/components/Media'
 import { Crosshair } from '@/components/Crosshair'
 import { projectBySlug } from '@/lib/data'
 
-/** Home — full-bleed warm field with KEV's showreel; the four menu words in a
- *  fine weight anchored to the corners, crosshair with micro "Kev." in the center. */
+/** Home — full-bleed warm field with KEV's showreel; crosshair with micro
+ *  "Kev." in the center. Navigation hides behind the Menu button (slide-in panel). */
 export default function Home() {
   const reel = projectBySlug('showreel')!.cover // video-clips/reel-kev.mp4 (cálido, en movimiento)
 
@@ -20,15 +19,12 @@ export default function Home() {
         Photographer<br />&amp; Director.
       </h1>
 
-      <nav className="kev-bleed__bl kev-home__nav rise-in">
-        <MenuList />
-        <span
-          className="kev-paren kev-sub"
-          style={{ display: 'block', marginTop: '1.2em', color: 'var(--ink-on-dark-2)' }}
-        >
-          Latin music culture, fashion editorial
-        </span>
-      </nav>
+      <span
+        className="kev-bleed__bl kev-paren kev-sub rise-in"
+        style={{ color: 'var(--ink-on-dark-2)' }}
+      >
+        Latin music culture, fashion editorial
+      </span>
 
       <span className="kev-bleed__br kev-counter">
         Medellín · Miami · CDMX · 2026
