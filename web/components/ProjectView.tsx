@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { Media } from '@/components/Media'
 import { Crosshair } from '@/components/Crosshair'
-import type { Project } from '@/lib/data'
+import type { Project } from '@/lib/content/types'
 
 /** Horizontal rail — one photo at a time, sliding right (scroll-snap).
  *  Reports the real 1-based index of the slide in view. Ends with View → next. */

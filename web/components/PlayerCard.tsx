@@ -9,7 +9,7 @@ import {
   onFullscreenChange,
   requestFullscreen,
 } from "@/lib/fullscreen";
-import type { Project } from "@/lib/data";
+import type { Project } from "@/lib/content/types";
 
 const fmt = (t: number) => {
   if (!Number.isFinite(t) || t < 0) return "0:00";

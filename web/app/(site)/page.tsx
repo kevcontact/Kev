@@ -1,16 +1,22 @@
 import { Media } from '@/components/Media'
 import { Crosshair } from '@/components/Crosshair'
-import { projectBySlug } from '@/lib/data'
+import { getProjects, getSettings } from '@/lib/content/repository'
+import { bySlug, videoProjectsOf } from '@/lib/content/select'
 
 /** Home — full-bleed warm field with KEV's showreel; crosshair with micro
  *  "Kev." in the center. Navigation hides behind the Menu button (slide-in panel). */
-export default function Home() {
-  const reel = projectBySlug('showreel')!.cover // video-clips/reel-kev.mp4 (cálido, en movimiento)
+export default async function Home() {
+  const [projects, settings] = await Promise.all([getProjects(), getSettings()])
+  // proyecto de portada elegido en /admin; si no existe, el primer video publicado
+  const hero =
+    (settings.homeProjectSlug && bySlug(projects, settings.homeProjectSlug)) ||
+    videoProjectsOf(projects)[0] ||
+    projects[0]
 
   return (
     <section className="kev-home kev-home--bleed kev-bleed">
       <div className="kev-bleed__bg">
-        <Media item={reel} alt="" loading="eager" />
+        {hero && <Media item={hero.cover} alt="" loading="eager" />}
       </div>
       <div className="kev-bleed__scrim" aria-hidden="true" />
       <Crosshair tone="dark" />

@@ -1,5 +1,5 @@
 import { mediaUrl } from '@/lib/media'
-import type { MediaItem } from '@/lib/data'
+import type { MediaItem } from '@/lib/content/types'
 
 /**
  * A real photograph or muted looping video inside the editorial `.frame`

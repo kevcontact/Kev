@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { Media } from '@/components/Media'
 import { Crosshair } from '@/components/Crosshair'
-import type { Project } from '@/lib/data'
+import type { Project } from '@/lib/content/types'
 
 /** Darkroom index — dark-field list with the home's full-bleed vibe:
  *  hovering a row floods the background with that project's cover. */

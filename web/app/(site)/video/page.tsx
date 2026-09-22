@@ -1,11 +1,8 @@
 import type { Metadata } from 'next'
 import { PlayerCard } from '@/components/PlayerCard'
-import {
-  brandVideoProjects,
-  musicVideoProjects,
-  videoProjects,
-  type Project,
-} from '@/lib/data'
+import { getProjects } from '@/lib/content/repository'
+import { brandVideos, musicVideos, videoProjectsOf } from '@/lib/content/select'
+import type { Project } from '@/lib/content/types'
 
 export const metadata: Metadata = { title: 'Video — KEV' }
 
@@ -32,7 +29,9 @@ function VideoSection({ label, items }: { label: string; items: Project[] }) {
 
 /** Video — dos bloques (clips musicales / marcas) de players inline sobre el
  *  campo oscuro (cinema), con controles de texto. */
-export default function VideoPage() {
+export default async function VideoPage() {
+  const projects = await getProjects()
+  const videoProjects = videoProjectsOf(projects)
   return (
     <section className="kev-videos kev-videos--dark">
       <div className="kev-videos__head">
@@ -43,8 +42,8 @@ export default function VideoPage() {
         </span>
       </div>
 
-      <VideoSection label="Music videos" items={musicVideoProjects} />
-      <VideoSection label="Brands" items={brandVideoProjects} />
+      <VideoSection label="Music videos" items={musicVideos(projects)} />
+      <VideoSection label="Brands" items={brandVideos(projects)} />
     </section>
   )
 }
