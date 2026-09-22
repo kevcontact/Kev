@@ -10,3 +10,6 @@ web/public/media
 .worktrees/
 scripts/v1-shots/
 scripts/rail-shots/
+
+# Obsidian vault (local knowledge base, gestionado por MCP)
+vault/

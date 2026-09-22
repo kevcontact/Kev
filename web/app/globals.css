@@ -21,7 +21,9 @@
   --frame:      #ECECEC;
   --frame-dark: #131313;
 
-  --cursor:     rgba(13, 13, 13, 0.16);
+  --cursor:      rgba(13, 13, 13, 0.28);
+  --cursor-ring: rgba(13, 13, 13, 0.62);
+  --cursor-halo: rgba(255, 255, 255, 0.42);
 
   /* ---------- SEMANTIC COLOR ---------- */
   --bg:   var(--paper);
@@ -184,13 +186,6 @@ a { color: inherit; text-decoration: none; }
   color: var(--accent);
   line-height: 1;
 }
-.kev-tag--solid {
-  color: var(--paper);
-  background: var(--accent);
-  padding: 4px 7px 3px;
-  border-radius: var(--r-sm);
-}
-
 .kev-ticks {
   --tick-gap: 9px;
   --tick-h: 9px;
@@ -213,19 +208,23 @@ a { color: inherit; text-decoration: none; }
 
 .kev-cursor {
   position: fixed; top: 0; left: 0;
-  width: 26px; height: 26px;
+  width: 30px; height: 30px;
   border-radius: 999px;
   background: var(--cursor);
+  /* anillo + halo: legible sobre foto clara y sobre foto oscura */
+  border: 1.5px solid var(--cursor-ring);
+  box-shadow: 0 0 0 1px var(--cursor-halo);
   pointer-events: none;
   z-index: 9999;
   transform: translate(-50%, -50%);
   transition: width .25s var(--ease), height .25s var(--ease),
-              background .25s var(--ease), opacity .2s linear;
+              background .25s var(--ease), border-color .25s var(--ease),
+              opacity .2s linear;
   will-change: transform;
   opacity: 0;
 }
 .kev-cursor.is-ready { opacity: 1; }
-.kev-cursor.is-hot { width: 54px; height: 54px; background: rgba(13,13,13,0.10); }
+.kev-cursor.is-hot { width: 56px; height: 56px; background: rgba(13,13,13,0.14); }
 @media (hover: none), (pointer: coarse) { .kev-cursor { display: none; } }
 
 .frame {
@@ -375,8 +374,7 @@ a { color: inherit; text-decoration: none; }
   font-size: var(--fs-h2); font-weight: var(--w-bold);
   letter-spacing: var(--ls-head); color: var(--ink); line-height: 1.05;
 }
-.kev-work__tag { transform: translateY(-2px); }
-.kev-work__year { margin-left: auto; flex: none; }
+.kev-work__tag { transform: translateY(-2px); margin-left: auto; flex: none; }
 .kev-work__list:hover .kev-work__row { opacity: .32; }
 .kev-work__list .kev-work__row:hover { opacity: 1; }
 
@@ -400,7 +398,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* MOBILE — stack the row in two lines so long titles never collide with the
-   client tag + year. Title on top; a quiet meta line (tag · year) below.
+   client tag. Title on top; a quiet meta line (the tag) below.
    Tighter rhythm so more projects fit, more editorial-contact-sheet less heavy. */
 @media (max-width: 640px) {
   .kev-work { padding: calc(var(--header-h) + 4vh) var(--pad-x) 7vh; }
@@ -419,13 +417,9 @@ a { color: inherit; text-decoration: none; }
   }
   .kev-work__tag {
     transform: none;
+    margin-left: 0;             /* on its own line the client tag reads left */
     order: 1;
     font-size: var(--fs-tag);
-  }
-  .kev-work__year {
-    margin-left: auto;          /* push year to the far right of the meta line */
-    order: 2;
-    flex: none;
   }
 }
 
@@ -521,7 +515,15 @@ a { color: inherit; text-decoration: none; }
 .kev-overview-grid__cell .frame { width: 100%; }
 .kev-overview-grid__cell .frame > img,
 .kev-overview-grid__cell .frame > video { height: auto; }
-.kev-overview-grid__tag { position: absolute; top: 10px; left: 10px; z-index: 3; }
+/* solo letra blanca sobre la foto — sin chip naranja (pedido cliente).
+   La sombra la mantiene legible sobre fotos claras. */
+.kev-overview-grid__tag {
+  position: absolute; top: 10px; left: 10px; z-index: 3;
+  color: var(--ink-on-dark);
+  background: none;
+  padding: 0;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
+}
 @media (max-width: 1100px) { .kev-overview-grid { columns: 3; } }
 @media (max-width: 760px)  { .kev-overview-grid { columns: 3; } }
 /* MOBILE — compact contact-sheet (3 thin columns, small gap) instead of one
@@ -535,10 +537,10 @@ a { color: inherit; text-decoration: none; }
   }
   .kev-overview-grid__cell { margin-bottom: 6px; }
   .kev-overview-grid__tag { top: 5px; left: 5px; }
-  .kev-overview-grid__tag.kev-tag--solid {
+  .kev-overview-grid__tag {
     font-size: 0.5rem;
     letter-spacing: 0.06em;
-    padding: 2px 4px 1px;
+    padding: 0;
   }
 }
 
@@ -575,7 +577,61 @@ a { color: inherit; text-decoration: none; }
 .kev-videos__title { font-size: var(--fs-h1); }
 .kev-videos__list { display: flex; flex-direction: column; gap: clamp(56px, 11vh, 128px); }
 
+/* dos bloques dentro de la misma pestaña: clips musicales y marcas */
+.kev-videos__section + .kev-videos__section { margin-top: clamp(72px, 14vh, 160px); }
+.kev-videos__sechead {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 20px;
+  padding-bottom: 12px;
+  margin-bottom: clamp(24px, 5vh, 52px);
+  border-bottom: 1px solid var(--hair);
+}
+.kev-videos__seclabel {
+  font-size: var(--fs-label); font-weight: var(--w-semibold);
+  text-transform: uppercase; letter-spacing: var(--ls-caps);
+}
+
 .kev-player__screen { width: 100%; }
+
+/* PANTALLA COMPLETA — el objetivo es el stage (pantalla + controles) para que
+   Mute, seek y Exit sigan al alcance. El aspect-ratio del screen viene inline,
+   de ahi el !important: en cine manda el alto real de la pantalla.
+   Los selectores van por separado a proposito: en lista separada por comas un
+   navegador que no entiende uno descartaria toda la regla. */
+.kev-player__stage:fullscreen {
+  display: flex; flex-direction: column;
+  width: 100vw; height: 100vh;
+  background: #000;
+  padding: 0 clamp(16px, 3vw, 40px) clamp(10px, 2vh, 24px);
+}
+.kev-player__stage:fullscreen .kev-player__screen {
+  aspect-ratio: auto !important;
+  flex: 1; min-height: 0;
+}
+.kev-player__stage:fullscreen .kev-player__screen > video { object-fit: contain; }
+.kev-player__stage:fullscreen .kev-player__screen::after { display: none; } /* sin grano en cine */
+.kev-player__stage:fullscreen .kev-player__ctl,
+.kev-player__stage:fullscreen .kev-player__title { color: var(--ink-on-dark); }
+.kev-player__stage:fullscreen .kev-player__tc { color: var(--ink-on-dark-2); }
+.kev-player__stage:fullscreen .kev-player__prog { background: rgba(242,239,234,0.18); }
+.kev-player__stage:fullscreen .kev-player__prog span { background: var(--ink-on-dark); }
+
+.kev-player__stage:-webkit-full-screen {
+  display: flex; flex-direction: column;
+  width: 100vw; height: 100vh;
+  background: #000;
+  padding: 0 clamp(16px, 3vw, 40px) clamp(10px, 2vh, 24px);
+}
+.kev-player__stage:-webkit-full-screen .kev-player__screen {
+  aspect-ratio: auto !important;
+  flex: 1; min-height: 0;
+}
+.kev-player__stage:-webkit-full-screen .kev-player__screen > video { object-fit: contain; }
+.kev-player__stage:-webkit-full-screen .kev-player__screen::after { display: none; }
+.kev-player__stage:-webkit-full-screen .kev-player__ctl,
+.kev-player__stage:-webkit-full-screen .kev-player__title { color: var(--ink-on-dark); }
+.kev-player__stage:-webkit-full-screen .kev-player__tc { color: var(--ink-on-dark-2); }
+.kev-player__stage:-webkit-full-screen .kev-player__prog { background: rgba(242,239,234,0.18); }
+.kev-player__stage:-webkit-full-screen .kev-player__prog span { background: var(--ink-on-dark); }
 .kev-player__hit {
   position: absolute; inset: 0; appearance: none; background: none; border: 0;
   width: 100%; height: 100%; z-index: 3;
@@ -637,7 +693,9 @@ a { color: inherit; text-decoration: none; }
   --ink-on-dark-2: rgba(242,239,234,0.72); /* secundario sobre negro/imagen ≥4.5:1 con scrim */
   --hair-on-dark: rgba(242,239,234,0.20);  /* hairline/crosshair sobre negro/imagen */
   --tick-on-dark: rgba(242,239,234,0.34);  /* ticks film-strip sobre negro/imagen */
-  --cursor-on-dark: rgba(242,239,234,0.22);
+  --cursor-on-dark: rgba(242,239,234,0.34);
+  --cursor-ring-on-dark: rgba(242,239,234,0.82);
+  --cursor-halo-on-dark: rgba(13,13,13,0.42);
 
   /* ---------- FINE WEIGHT (traducción de Neue Montreal Light → peso de la grotesca) ---------- */
   --w-light: 300;                          /* titulares atmosféricos; requiere 300 en next/font */
@@ -812,6 +870,8 @@ a { color: inherit; text-decoration: none; }
 /* VIDEO — campo negro pleno (es cine); players intactos, solo color */
 .kev-videos--dark { background: var(--field-dark); color: var(--ink-on-dark); }
 .kev-videos--dark .kev-videos__title { font-weight: var(--w-light); letter-spacing: var(--ls-atmos); }
+.kev-videos--dark .kev-videos__sechead { border-bottom-color: var(--hair-on-dark); }
+.kev-videos--dark .kev-videos__seclabel { color: var(--ink-on-dark); }
 .kev-videos--dark .kev-counter { color: var(--ink-on-dark-2); }
 .kev-videos--dark .kev-player__ctl { color: var(--ink-on-dark); }
 .kev-videos--dark .kev-player__ctl:hover { opacity: .5; }
@@ -825,6 +885,17 @@ a { color: inherit; text-decoration: none; }
 .kev-info { position: relative; }
 .kev-info__lead { font-weight: var(--w-light); letter-spacing: -0.01em; line-height: 1.18; }
 .kev-info__sign { margin-top: clamp(48px, 10vh, 120px); color: var(--fg2); display: block; }
+/* contacto: enlaces directos (mailto / Instagram) en vez de texto muerto */
+.kev-info__link {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--hair);
+  padding-bottom: 1px;
+  transition: color .18s var(--ease), border-color .18s var(--ease);
+}
+.kev-info__link:hover,
+.kev-info__link:focus-visible { color: var(--accent); border-bottom-color: var(--accent); }
+.kev-info__ext { margin-left: 6px; font-size: 0.85em; }
 .kev-info--dark { background: var(--field-dark); color: var(--ink-on-dark); }
 .kev-info--dark .kev-info__lead { color: var(--ink-on-dark); }
 .kev-info--dark .kev-info__h { color: var(--ink-on-dark-2); }
@@ -848,11 +919,16 @@ a { color: inherit; text-decoration: none; }
   content: ""; position: absolute; left: 50%; top: 50%; background: currentColor;
   opacity: 0; transition: opacity .2s var(--ease);
 }
-.kev-cursor::before { width: 1px;  height: 12px; transform: translate(-50%,-50%); }
-.kev-cursor::after  { width: 12px; height: 1px;  transform: translate(-50%,-50%); }
-.kev-cursor.is-hot::before, .kev-cursor.is-hot::after { opacity: .45; }
-.kev-cursor.on-dark { background: var(--cursor-on-dark); color: var(--ink-on-dark); }
-.kev-cursor.on-dark.is-hot { background: rgba(242,239,234,0.12); }
+.kev-cursor::before { width: 1.5px; height: 14px; transform: translate(-50%,-50%); }
+.kev-cursor::after  { width: 14px; height: 1.5px; transform: translate(-50%,-50%); }
+.kev-cursor.is-hot::before, .kev-cursor.is-hot::after { opacity: .8; }
+.kev-cursor.on-dark {
+  background: var(--cursor-on-dark);
+  border-color: var(--cursor-ring-on-dark);
+  box-shadow: 0 0 0 1px var(--cursor-halo-on-dark);
+  color: var(--ink-on-dark);
+}
+.kev-cursor.on-dark.is-hot { background: rgba(242,239,234,0.18); }
 
 /* ============================================================
    WORK INDEX — darkroom (las vibes del Home en Photography/Overview)
@@ -892,7 +968,6 @@ a { color: inherit; text-decoration: none; }
 }
 /* sin naranja-texto sobre oscuro (regla Darkroom): cliente y año neutros */
 .kev-work--dark .kev-work__tag { color: var(--ink-on-dark-2); }
-.kev-work--dark .kev-work__year { color: var(--ink-on-dark-2); }
 /* el preview-panel derecho del v1 no existe aquí: el fondo es el preview */
 @media (min-width: 880px) {
   .kev-work--dark .kev-work__list { width: 60%; }

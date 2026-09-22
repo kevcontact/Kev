@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="KEV">
+  <rect width="64" height="64" fill="#0D0D0D"/>
+  <text x="32" y="44"
+        textLength="55" lengthAdjust="spacingAndGlyphs"
+        font-family="Helvetica Neue, Helvetica, Arial, sans-serif"
+        font-size="36" font-weight="700"
+        fill="#F2EFEA" text-anchor="middle">Kev</text>
+</svg>

@@ -39,12 +39,27 @@ export default function InformationPage() {
         <div className="kev-info__col">
           <span className="kev-caps kev-info__h">Contact</span>
           <ul className="kev-info__list">
-            {info.contact.map((c) => (
-              <li key={c.label}>
-                <span className="kev-info__ck">{c.label}</span>
-                {c.value}
-              </li>
-            ))}
+            {info.contact.map((c) => {
+              const external = c.href.startsWith('http')
+              return (
+                <li key={c.label}>
+                  <span className="kev-info__ck">{c.label}</span>
+                  <a
+                    className="kev-info__link"
+                    href={c.href}
+                    target={external ? '_blank' : undefined}
+                    rel={external ? 'noreferrer' : undefined}
+                  >
+                    {c.value}
+                    {external && (
+                      <span className="kev-info__ext" aria-hidden="true">
+                        ↗
+                      </span>
+                    )}
+                  </a>
+                </li>
+              )
+            })}
           </ul>
         </div>
       </div>

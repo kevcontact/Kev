@@ -97,15 +97,13 @@ function GalleryRail({
         <Link href={`/work/${next.slug}`} className="kev-next__link">
           View <span className="kev-next__arrow">→</span> {next.title}
         </Link>
-        <span className="kev-sub kev-next__client">
-          {next.client} · {next.year}
-        </span>
+        <span className="kev-sub kev-next__client">{next.client}</span>
       </div>
     </div>
   )
 }
 
-/** Masonry grid (4→3→2→1 columns) with solid orange client tags. */
+/** Masonry grid (4→3→2→1 columns) with plain white client tags. */
 function OverviewView({ project }: { project: Project }) {
   return (
     <div className="kev-overview-grid">
@@ -116,7 +114,7 @@ function OverviewView({ project }: { project: Project }) {
             alt={`${project.title} — ${String(i + 1).padStart(2, '0')}`}
           >
             {i % 3 === 0 && (
-              <span className="kev-tag kev-tag--solid kev-overview-grid__tag">
+              <span className="kev-tag kev-overview-grid__tag">
                 {project.client}
               </span>
             )}
@@ -166,7 +164,7 @@ export function ProjectView({
         <div className="kev-bleed__bl">
           <span className="kev-chapter__divider" aria-hidden="true" />
           <span className="kev-counter" style={{ color: 'var(--ink-on-dark-2)' }}>
-            {project.client} · {project.year}
+            {project.client}
           </span>
         </div>
       </header>
@@ -174,9 +172,7 @@ export function ProjectView({
       <div className="kev-project__bar">
         <div className="kev-project__id">
           <h1 className="kev-project__title">{project.title}</h1>
-          <span className="kev-sub">
-            {project.client} · {project.year}
-          </span>
+          <span className="kev-sub">{project.client}</span>
         </div>
         <div className="kev-project__toggle" role="tablist">
           <button
@@ -218,9 +214,7 @@ export function ProjectView({
           <Link href={`/work/${next.slug}`} className="kev-next__link">
             View <span className="kev-next__arrow">→</span> {next.title}
           </Link>
-          <span className="kev-sub kev-next__client">
-            {next.client} · {next.year}
-          </span>
+          <span className="kev-sub kev-next__client">{next.client}</span>
         </div>
       )}
     </section>

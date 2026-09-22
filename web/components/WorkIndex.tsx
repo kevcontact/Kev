@@ -52,7 +52,6 @@ export function WorkIndex({
               >
                 <span className="kev-work__name">{p.title}</span>
                 <span className="kev-tag kev-work__tag">{p.client}</span>
-                <span className="kev-work__year kev-counter">{p.year}</span>
               </Link>
             </li>
           ))}

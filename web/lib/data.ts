@@ -238,16 +238,42 @@ export const nextProject = (slug: string): Project => {
   return projects[(i + 1) % projects.length]
 }
 
-export const videoProjects = projects.filter(
+export const videoProjects: Project[] = projects.filter(
   (p) => p.items[0]?.type === 'video',
 )
+
+/** Los dos bloques de /video: clips musicales y piezas de marca. */
+export const musicVideoProjects: Project[] = videoProjects.filter(
+  (p) => p.kind === 'Video',
+)
+export const brandVideoProjects: Project[] = videoProjects.filter(
+  (p) => p.kind === 'Brand',
+)
+
+/** Un contacto de la pestaña Information: se renderiza como enlace directo. */
+export type ContactLink = {
+  label: string
+  /** lo que se lee en pantalla */
+  value: string
+  /** destino real: mailto: para correo, URL absoluta para redes */
+  href: string
+}
 
 export const info = {
   bio: 'KEV is a photographer and music-video director. The work moves between Latin music culture and fashion editorial — campaigns, album cycles, music videos and brand collaborations.',
   clients: ['J Balvin', 'Maluma', 'Maisak', 'FDRS', 'New Era', 'OVY On The Drums', 'Mood Lab'],
   services: ['Photography', 'Music Video Direction', 'Brand Film', 'Creative Direction'],
+  // TODO(cliente): correo real + handles de Instagram definitivos.
   contact: [
-    { label: 'Email', value: 'studio@kev.com' },
-    { label: 'Instagram', value: '@kev' },
-  ],
+    {
+      label: 'Email',
+      value: 'studio@kev.com',
+      href: 'mailto:studio@kev.com',
+    },
+    {
+      label: 'Instagram',
+      value: '@kev',
+      href: 'https://www.instagram.com/kev/',
+    },
+  ] satisfies ContactLink[],
 }
