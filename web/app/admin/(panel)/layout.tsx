@@ -12,6 +12,7 @@ export default async function PanelLayout({ children }: Readonly<{ children: Rea
         <nav className="adm-nav">
           <Link href="/admin">Proyectos</Link>
           <Link href="/admin/settings">Información</Link>
+          <Link href="/admin/account">Cuenta</Link>
           <a href="/" target="_blank" rel="noreferrer">Ver sitio ↗</a>
         </nav>
         <form action={signOut} className="adm-who">
