@@ -22,7 +22,7 @@ export function Cursor() {
       const hot = target?.closest?.('a, button, [data-hot]')
       dot.classList.toggle('is-hot', !!hot)
       const onDark = target?.closest?.(
-        '.kev-bleed:not(.kev-bleed--paper), .kev-videos--dark, .kev-info--dark',
+        '.kev-bleed:not(.kev-bleed--paper), .kev-work--dark, .kev-videos--dark, .kev-info--dark',
       )
       dot.classList.toggle('on-dark', !!onDark)
     }

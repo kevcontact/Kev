@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
-import { info } from '@/lib/data'
+import { getSettings } from '@/lib/content/repository'
 
 export const metadata: Metadata = { title: 'Information — KEV' }
 
 /** Information — terse bio (fine weight), clients, services, contact; scattered K·E·V. */
-export default function InformationPage() {
-  // SYNTHESIS §2 bans em dashes in copy. lib/data.ts is untouchable, so we
-  // normalize the em dash to a middot at render time only (no data mutation).
+export default async function InformationPage() {
+  const info = await getSettings()
+  // SYNTHESIS §2 bans em dashes in copy: se normalizan al renderizar, sin tocar el dato.
   const bio = info.bio.replace(/\s+—\s+/g, ' · ')
 
   return (
@@ -36,17 +36,34 @@ export default function InformationPage() {
             ))}
           </ul>
         </div>
+        {info.contact.length > 0 && (
         <div className="kev-info__col">
           <span className="kev-caps kev-info__h">Contact</span>
           <ul className="kev-info__list">
-            {info.contact.map((c) => (
-              <li key={c.label}>
-                <span className="kev-info__ck">{c.label}</span>
-                {c.value}
-              </li>
-            ))}
+            {info.contact.map((c) => {
+              const external = c.href.startsWith('http')
+              return (
+                <li key={c.label}>
+                  <span className="kev-info__ck">{c.label}</span>
+                  <a
+                    className="kev-info__link"
+                    href={c.href}
+                    target={external ? '_blank' : undefined}
+                    rel={external ? 'noreferrer' : undefined}
+                  >
+                    {c.value}
+                    {external && (
+                      <span className="kev-info__ext" aria-hidden="true">
+                        ↗
+                      </span>
+                    )}
+                  </a>
+                </li>
+              )
+            })}
           </ul>
         </div>
+        )}
       </div>
 
       <span className="kev-paren kev-counter kev-info__sign">
