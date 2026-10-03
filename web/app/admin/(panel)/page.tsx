@@ -1,5 +1,7 @@
 import Link from 'next/link'
+import { PendingButton } from '@/components/admin/PendingButton'
 import { requireAdmin } from '@/lib/admin/auth'
+import type { ProjectKind } from '@/lib/content/types'
 import { mediaUrl } from '@/lib/media'
 import { moveProject, setPublished } from '../actions/projects'
 
@@ -8,9 +10,23 @@ type Row = {
   slug: string
   title: string
   client: string
-  kind: string
+  kind: ProjectKind
   published: boolean
   media: { type: string; path: string; poster_path: string | null; position: number }[]
+}
+
+const KIND_SHORT: Record<ProjectKind, string> = {
+  Photography: 'Fotografía',
+  Video: 'Video musical',
+  Brand: 'Marca',
+}
+
+/** "Maluma · Fotografía · 11 archivos" (sin cliente no deja un punto suelto). */
+const detailOf = (r: Row): string => {
+  const n = r.media.length
+  return [r.client, KIND_SHORT[r.kind] ?? r.kind, `${n} ${n === 1 ? 'archivo' : 'archivos'}`]
+    .filter(Boolean)
+    .join(' · ')
 }
 
 const thumbOf = (r: Row): string | null => {
@@ -45,18 +61,24 @@ export default async function ProjectsPage() {
             <li key={r.id} className={r.published ? '' : 'is-draft'}>
               <div className="adm-thumb">{thumb && <img src={mediaUrl(thumb)} alt="" loading="lazy" />}</div>
               <Link href={`/admin/projects/${r.id}`} className="adm-list__main">
-                <strong>{r.title}</strong>
-                <span>{r.client} · {r.kind} · {r.media.length} archivos{r.published ? '' : ' · BORRADOR'}</span>
+                <strong>
+                  {r.title}
+                  {!r.published && <em className="adm-tag">Oculto</em>}
+                  {r.published && r.media.length === 0 && <em className="adm-tag">Sin archivos · no aparece</em>}
+                </strong>
+                <span>{detailOf(r)}</span>
               </Link>
               <div className="adm-list__actions">
                 <form action={moveProject.bind(null, r.id, 'up')}>
-                  <button className="adm-icon" disabled={i === 0} aria-label={`Subir ${r.title}`}>↑</button>
+                  <PendingButton className="adm-icon" disabled={i === 0} aria-label={`Subir ${r.title}`} pendingLabel="…">↑</PendingButton>
                 </form>
                 <form action={moveProject.bind(null, r.id, 'down')}>
-                  <button className="adm-icon" disabled={i === rows.length - 1} aria-label={`Bajar ${r.title}`}>↓</button>
+                  <PendingButton className="adm-icon" disabled={i === rows.length - 1} aria-label={`Bajar ${r.title}`} pendingLabel="…">↓</PendingButton>
                 </form>
                 <form action={setPublished.bind(null, r.id, !r.published)}>
-                  <button className="adm-btn adm-btn--ghost">{r.published ? 'Ocultar' : 'Publicar'}</button>
+                  <PendingButton className="adm-btn adm-btn--ghost adm-btn--fixed" pendingLabel="Guardando…">
+                    {r.published ? 'Ocultar' : 'Publicar'}
+                  </PendingButton>
                 </form>
               </div>
             </li>

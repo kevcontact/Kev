@@ -2,13 +2,11 @@
 
 import { useActionState } from 'react'
 import type { ActionResult } from '@/lib/admin/result'
-import type { ContactLink, SiteSettings } from '@/lib/content/types'
+import { splitContact } from '@/lib/admin/contact-fields'
+import type { SiteSettings } from '@/lib/content/types'
 
-const CONTACT_SLOTS = 4
-const PRESETS: ContactLink[] = [
-  { label: 'Email', value: 'correo@dominio.com', href: 'mailto:correo@dominio.com' },
-  { label: 'Instagram', value: '@usuario', href: 'https://www.instagram.com/usuario/' },
-]
+/** Enlaces extra además de correo e Instagram (Vimeo, WhatsApp…). */
+const OTHER_SLOTS = 2
 
 export function SettingsForm({
   action,
@@ -20,7 +18,8 @@ export function SettingsForm({
   projectOptions: { slug: string; title: string }[]
 }) {
   const [state, formAction, pending] = useActionState(action, null)
-  const slots = Array.from({ length: CONTACT_SLOTS }, (_, i) => initial.contact[i])
+  const { email, instagram, others } = splitContact(initial.contact)
+  const slots = Array.from({ length: OTHER_SLOTS }, (_, i) => others[i])
 
   return (
     <form action={formAction} className="adm-form">
@@ -40,16 +39,27 @@ export function SettingsForm({
       </div>
 
       <fieldset className="adm-fieldset">
-        <legend>Contacto (botones directos en Information)</legend>
+        <legend>Contacto</legend>
         <p className="adm-hint">
-          Correo: enlace <code>mailto:correo@dominio.com</code>. Instagram: <code>https://www.instagram.com/usuario/</code>.
-          Deja una fila vacía para no mostrarla.
+          Se muestran en la página Information. Instagram además queda fijo en el menú de todo el sitio.
+          Deja un campo vacío para no mostrarlo.
         </p>
+        <div className="adm-row">
+          <label>
+            Correo
+            <input name="contact_email" type="email" defaultValue={email} placeholder="ej.: hola@kevfilm.com" autoComplete="off" />
+          </label>
+          <label>
+            Instagram <small>(usuario o enlace)</small>
+            <input name="contact_instagram" defaultValue={instagram} placeholder="ej.: @kevfilm" autoComplete="off" />
+          </label>
+        </div>
+        <p className="adm-hint adm-hint--tight">Otros enlaces (opcional)</p>
         {slots.map((c, i) => (
           <div key={i} className="adm-contact">
-            <input name={`contact_label_${i}`} defaultValue={c?.label ?? ''} placeholder={PRESETS[i]?.label ?? 'Etiqueta'} aria-label={`Etiqueta ${i + 1}`} />
-            <input name={`contact_value_${i}`} defaultValue={c?.value ?? ''} placeholder={PRESETS[i]?.value ?? 'Texto visible'} aria-label={`Texto visible ${i + 1}`} />
-            <input name={`contact_href_${i}`} defaultValue={c?.href ?? ''} placeholder={PRESETS[i]?.href ?? 'https://…'} aria-label={`Enlace ${i + 1}`} />
+            <input name={`contact_label_${i}`} defaultValue={c?.label ?? ''} placeholder="Nombre (ej.: Vimeo)" aria-label={`Nombre del enlace ${i + 1}`} />
+            <input name={`contact_value_${i}`} defaultValue={c?.value ?? ''} placeholder="Texto visible" aria-label={`Texto visible ${i + 1}`} />
+            <input name={`contact_href_${i}`} defaultValue={c?.href ?? ''} placeholder="https://…" aria-label={`Enlace ${i + 1}`} />
           </div>
         ))}
       </fieldset>

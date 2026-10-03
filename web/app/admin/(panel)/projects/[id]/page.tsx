@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ConfirmButton } from '@/components/admin/ConfirmButton'
 import { MediaUploader } from '@/components/admin/MediaUploader'
+import { PendingButton } from '@/components/admin/PendingButton'
 import { ProjectForm } from '@/components/admin/ProjectForm'
 import { requireAdmin } from '@/lib/admin/auth'
 import type { ProjectKind } from '@/lib/content/types'
@@ -35,8 +36,14 @@ export default async function EditProjectPage({ params }: { params: Promise<{ id
       <p><Link href="/admin" className="adm-back">← Proyectos</Link></p>
       <div className="adm-head">
         <h1 className="adm-h1">{p.title}</h1>
-        {p.published && <a href={`/work/${p.slug}`} target="_blank" rel="noreferrer" className="adm-btn adm-btn--ghost">Ver en el sitio ↗</a>}
+        {p.published && media.length > 0 && (
+          <a href={`/work/${p.slug}`} target="_blank" rel="noreferrer" className="adm-btn adm-btn--ghost">Ver en el sitio ↗</a>
+        )}
       </div>
+      {!p.published && <p className="adm-hint">Oculto: no se ve en el sitio hasta marcar «Publicado» y guardar.</p>}
+      {p.published && media.length === 0 && (
+        <p className="adm-hint">Todavía no se ve en el sitio: sube al menos una foto o un video.</p>
+      )}
 
       <div className="adm-cols">
         <ProjectForm
@@ -67,13 +74,13 @@ export default async function EditProjectPage({ params }: { params: Promise<{ id
                 </div>
                 <div className="adm-grid__actions">
                   <form action={moveMedia.bind(null, m.id, p.id, 'up')}>
-                    <button className="adm-icon" disabled={i === 0} aria-label="Mover antes">←</button>
+                    <PendingButton className="adm-icon" disabled={i === 0} aria-label="Mover antes" pendingLabel="…">←</PendingButton>
                   </form>
                   <form action={moveMedia.bind(null, m.id, p.id, 'down')}>
-                    <button className="adm-icon" disabled={i === media.length - 1} aria-label="Mover después">→</button>
+                    <PendingButton className="adm-icon" disabled={i === media.length - 1} aria-label="Mover después" pendingLabel="…">→</PendingButton>
                   </form>
                   <form action={deleteMedia.bind(null, m.id, p.id)}>
-                    <ConfirmButton message="¿Borrar este archivo? No se puede deshacer." className="adm-icon adm-icon--danger">✕</ConfirmButton>
+                    <ConfirmButton message="¿Borrar este archivo? No se puede deshacer." className="adm-icon adm-icon--danger" pendingLabel="…" aria-label="Borrar archivo">✕</ConfirmButton>
                   </form>
                 </div>
               </li>

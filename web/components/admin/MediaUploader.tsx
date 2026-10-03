@@ -15,6 +15,8 @@ export function MediaUploader({ projectId, projectSlug }: { projectId: string; p
   const router = useRouter()
   const [statuses, setStatuses] = useState<Status[]>([])
   const [busy, setBusy] = useState(false)
+  // archivos arrastrándose sobre la zona: se resalta para que se note que se puede soltar
+  const [over, setOver] = useState(false)
 
   const setStatus = (i: number, next: Status) =>
     setStatuses((prev) => prev.map((s, k) => (k === i ? next : s)))
@@ -78,8 +80,21 @@ export function MediaUploader({ projectId, projectSlug }: { projectId: string; p
 
   return (
     <div className="adm-uploader">
-      <label className="adm-drop">
+      <label
+        className={'adm-drop' + (over ? ' is-over' : '') + (busy ? ' is-busy' : '')}
+        onDragOver={(e) => {
+          e.preventDefault()
+          if (!busy) setOver(true)
+        }}
+        onDragLeave={() => setOver(false)}
+        onDrop={(e) => {
+          e.preventDefault()
+          setOver(false)
+          if (!busy) void onFiles(e.dataTransfer.files)
+        }}
+      >
         <input
+          className="adm-sr-only"
           type="file"
           multiple
           accept="image/jpeg,image/png,image/webp,video/mp4"
@@ -89,7 +104,7 @@ export function MediaUploader({ projectId, projectSlug }: { projectId: string; p
             e.target.value = ''
           }}
         />
-        <strong>{busy ? 'Subiendo…' : 'Agregar fotos o videos'}</strong>
+        <strong>{busy ? 'Subiendo… no cierres esta página' : 'Arrastra fotos o videos aquí, o haz clic para elegirlos'}</strong>
         <span>Fotos JPG/PNG/WebP (se optimizan solas) · Videos MP4 H.264 1080p hasta 300 MB</span>
       </label>
       {statuses.length > 0 && (

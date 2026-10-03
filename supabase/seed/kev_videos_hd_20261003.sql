@@ -1,0 +1,36 @@
+-- Videos 1080p (2026-10-03): reemplaza los 10 clips comprimidos a ≤50 MB y agrega 4 nuevos.
+-- Archivos en kev-media/video-hd/<slug>.mp4 + póster .jpg (H.264 CRF 19, techo 6 Mbps). Idempotente.
+begin;
+insert into kev.projects (slug, title, client, kind, position) values ('dalex-farruko', 'Dalex × Farruko', 'Music Video', 'Video', 75) on conflict (slug) do nothing;
+insert into kev.projects (slug, title, client, kind, position) values ('con-amor', 'Con Amor — Nicky Jam × Maisak', 'Music Video', 'Video', 85) on conflict (slug) do nothing;
+insert into kev.projects (slug, title, client, kind, position) values ('agua-bendita', 'Agua Bendita', 'Agua Bendita', 'Brand', 145) on conflict (slug) do nothing;
+insert into kev.projects (slug, title, client, kind, position) values ('aron-film', 'Aron', 'Aron', 'Brand', 147) on conflict (slug) do nothing;
+delete from kev.media where type = 'video' and project_id = (select id from kev.projects where slug = 'agua-bendita');
+insert into kev.media (project_id, type, path, poster_path, width, height, duration, position) select id, 'video', 'video-hd/agua-bendita.mp4', 'video-hd/agua-bendita.jpg', 1440, 1080, 60.44, 0 from kev.projects where slug = 'agua-bendita';
+delete from kev.media where type = 'video' and project_id = (select id from kev.projects where slug = 'aron-film');
+insert into kev.media (project_id, type, path, poster_path, width, height, duration, position) select id, 'video', 'video-hd/aron-film.mp4', 'video-hd/aron-film.jpg', 1440, 1080, 28.29, 0 from kev.projects where slug = 'aron-film';
+delete from kev.media where type = 'video' and project_id = (select id from kev.projects where slug = 'blouw-up');
+insert into kev.media (project_id, type, path, poster_path, width, height, duration, position) select id, 'video', 'video-hd/blouw-up.mp4', 'video-hd/blouw-up.jpg', 1440, 1080, 31.36, 0 from kev.projects where slug = 'blouw-up';
+delete from kev.media where type = 'video' and project_id = (select id from kev.projects where slug = 'con-amor');
+insert into kev.media (project_id, type, path, poster_path, width, height, duration, position) select id, 'video', 'video-hd/con-amor.mp4', 'video-hd/con-amor.jpg', 1920, 1080, 194.28, 0 from kev.projects where slug = 'con-amor';
+delete from kev.media where type = 'video' and project_id = (select id from kev.projects where slug = 'create-ovy-madrid');
+insert into kev.media (project_id, type, path, poster_path, width, height, duration, position) select id, 'video', 'video-hd/create-ovy-madrid.mp4', 'video-hd/create-ovy-madrid.jpg', 1444, 1080, 48.98, 0 from kev.projects where slug = 'create-ovy-madrid';
+delete from kev.media where type = 'video' and project_id = (select id from kev.projects where slug = 'dalex-farruko');
+insert into kev.media (project_id, type, path, poster_path, width, height, duration, position) select id, 'video', 'video-hd/dalex-farruko.mp4', 'video-hd/dalex-farruko.jpg', 1920, 1080, 161.96, 0 from kev.projects where slug = 'dalex-farruko';
+delete from kev.media where type = 'video' and project_id = (select id from kev.projects where slug = 'en-otra-vida');
+insert into kev.media (project_id, type, path, poster_path, width, height, duration, position) select id, 'video', 'video-hd/en-otra-vida.mp4', 'video-hd/en-otra-vida.jpg', 1920, 1080, 154.2, 0 from kev.projects where slug = 'en-otra-vida';
+delete from kev.media where type = 'video' and project_id = (select id from kev.projects where slug = 'la-esencia');
+insert into kev.media (project_id, type, path, poster_path, width, height, duration, position) select id, 'video', 'video-hd/la-esencia.mp4', 'video-hd/la-esencia.jpg', 1440, 1080, 181.31, 0 from kev.projects where slug = 'la-esencia';
+delete from kev.media where type = 'video' and project_id = (select id from kev.projects where slug = 'moda-cosmos');
+insert into kev.media (project_id, type, path, poster_path, width, height, duration, position) select id, 'video', 'video-hd/moda-cosmos.mp4', 'video-hd/moda-cosmos.jpg', 1440, 1080, 26.3, 0 from kev.projects where slug = 'moda-cosmos';
+delete from kev.media where type = 'video' and project_id = (select id from kev.projects where slug = 'mood-lab');
+insert into kev.media (project_id, type, path, poster_path, width, height, duration, position) select id, 'video', 'video-hd/mood-lab.mp4', 'video-hd/mood-lab.jpg', 1440, 1080, 69.78, 0 from kev.projects where slug = 'mood-lab';
+delete from kev.media where type = 'video' and project_id = (select id from kev.projects where slug = 'no-es-un-secreto');
+insert into kev.media (project_id, type, path, poster_path, width, height, duration, position) select id, 'video', 'video-hd/no-es-un-secreto.mp4', 'video-hd/no-es-un-secreto.jpg', 1440, 1080, 144.49, 0 from kev.projects where slug = 'no-es-un-secreto';
+delete from kev.media where type = 'video' and project_id = (select id from kev.projects where slug = 'showreel');
+insert into kev.media (project_id, type, path, poster_path, width, height, duration, position) select id, 'video', 'video-hd/showreel.mp4', 'video-hd/showreel.jpg', 1440, 1080, 62.27, 0 from kev.projects where slug = 'showreel';
+delete from kev.media where type = 'video' and project_id = (select id from kev.projects where slug = 'tikiti');
+insert into kev.media (project_id, type, path, poster_path, width, height, duration, position) select id, 'video', 'video-hd/tikiti.mp4', 'video-hd/tikiti.jpg', 1920, 1080, 170.56, 0 from kev.projects where slug = 'tikiti';
+delete from kev.media where type = 'video' and project_id = (select id from kev.projects where slug = 'up-bts');
+insert into kev.media (project_id, type, path, poster_path, width, height, duration, position) select id, 'video', 'video-hd/up-bts.mp4', 'video-hd/up-bts.jpg', 1920, 1080, 142.81, 0 from kev.projects where slug = 'up-bts';
+commit;
