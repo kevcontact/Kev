@@ -9,6 +9,7 @@ import {
   onFullscreenChange,
   requestFullscreen,
 } from "@/lib/fullscreen";
+import { onViewChange } from "@/lib/in-view";
 import type { Project } from "@/lib/content/types";
 
 const fmt = (t: number) => {
@@ -18,12 +19,16 @@ const fmt = (t: number) => {
   return `${m}:${String(s).padStart(2, "0")}`;
 };
 
-/** Real inline player — autoplay muted, text-only controls, seekable thin bar.
+/** Real inline player — muted, text-only controls, seekable thin bar.
+ *  Corre solo mientras está a la vista: al bajar, el de arriba para y arranca el que entra.
  *  Un solo clip suena a la vez: al quitar el mute, los demás se callan y paran. */
 export function PlayerCard({ project }: { project: Project }) {
   const item = project.items[0];
   const videoRef = useRef<HTMLVideoElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
+  const screenRef = useRef<HTMLDivElement>(null);
+  // pausa elegida por el usuario: el scroll no la deshace
+  const userPaused = useRef(false);
   // start as paused: autoplay can be blocked/deferred; onPlay reconciles
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(true);
@@ -64,9 +69,28 @@ export function PlayerCard({ project }: { project: Project }) {
   /** Este clip pasa a ser el único con sonido. */
   const takeAudio = useCallback(() => claimAudio(project.slug), [project.slug]);
 
+  // a la vista corre, fuera de ella para. En fullscreen no se toca: el scroll de
+  // fondo no cuenta.
+  useEffect(() => {
+    const screen = screenRef.current;
+    if (!screen) return;
+    return onViewChange(screen, (inView) => {
+      const v = videoRef.current;
+      if (!v || isElementFullscreen(stageRef.current, v)) return;
+      if (!inView) {
+        v.pause();
+        return;
+      }
+      if (userPaused.current || !v.paused) return;
+      if (!v.muted) takeAudio();
+      v.play().catch(() => setPlaying(false));
+    });
+  }, [takeAudio]);
+
   const togglePlay = () => {
     const v = videoRef.current;
     if (!v) return;
+    userPaused.current = !v.paused;
     if (v.paused) {
       if (!v.muted) takeAudio();
       v.play().catch(() => setPlaying(false));
@@ -84,6 +108,7 @@ export function PlayerCard({ project }: { project: Project }) {
     if (!next) {
       // recién ahora este clip suena: silenciar a los demás y asegurar el play
       takeAudio();
+      userPaused.current = false;
       if (v.paused) v.play().catch(() => setPlaying(false));
     }
   };
@@ -109,6 +134,7 @@ export function PlayerCard({ project }: { project: Project }) {
     <article className="kev-player">
       <div ref={stageRef} className="kev-player__stage">
         <div
+          ref={screenRef}
           className="frame frame--dark kev-player__screen"
           style={{ aspectRatio: `${item.w} / ${item.h}` }}
         >
@@ -116,7 +142,6 @@ export function PlayerCard({ project }: { project: Project }) {
             ref={videoRef}
             src={mediaUrl(item.src)}
             poster={item.poster ? mediaUrl(item.poster) : undefined}
-            autoPlay
             muted
             loop
             playsInline

@@ -5,7 +5,13 @@ import { Cursor } from '@/components/Cursor'
 import { Header } from '@/components/Header'
 
 /** App chrome + entrance-reveal gate (`.is-ready`), as in the design-system kit. */
-export function AppShell({ children }: { children: React.ReactNode }) {
+type AppShellProps = {
+  children: React.ReactNode
+  /** URL del Instagram de KEV; null mientras el productor no la cargue */
+  instagram: string | null
+}
+
+export function AppShell({ children, instagram }: AppShellProps) {
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
@@ -16,7 +22,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className={'kev-app' + (ready ? ' is-ready' : '')}>
       <Cursor />
-      <Header />
+      <Header instagram={instagram} />
       <main>{children}</main>
     </div>
   )

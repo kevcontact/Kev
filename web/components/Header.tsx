@@ -8,8 +8,9 @@ import { MenuList } from '@/components/MenuList'
 
 /** Persistent header (wordmark · film-strip ruler · Menu) + slide-in menu panel.
  *  The panel slides left→right over a transparent dark scrim so the page
- *  underneath stays visible. Hidden until the Menu button is pressed. */
-export function Header() {
+ *  underneath stays visible. Hidden until the Menu button is pressed.
+ *  Instagram queda siempre a la vista junto a Menu cuando el productor lo cargó. */
+export function Header({ instagram }: { instagram: string | null }) {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
   const toggleRef = useRef<HTMLButtonElement>(null)
@@ -79,6 +80,16 @@ export function Header() {
           Kev.
         </Link>
         <span className="kev-ticks" aria-hidden="true"></span>
+        {instagram && (
+          <a
+            className="kev-header__menu kev-label"
+            href={instagram}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Instagram
+          </a>
+        )}
         <button
           ref={toggleRef}
           type="button"
