@@ -2,7 +2,8 @@
 .adm {
   --a-bg: #f6f5f2; --a-card: #fff; --a-ink: #0d0d0d; --a-mute: #6b6b6b;
   --a-line: #e2e0db; --a-accent: #ff4d17; --a-danger: #c62828; --a-ok: #2e7d32;
-  min-height: 100vh; background: var(--a-bg); color: var(--a-ink);
+  /* flow-root: el margin-top de .adm-login no debe colapsar hacia fuera y destapar el body */
+  display: flow-root; min-height: 100vh; background: var(--a-bg); color: var(--a-ink);
   font-family: var(--font-archivo), system-ui, sans-serif; font-size: 15px; line-height: 1.45;
   cursor: auto;
 }
