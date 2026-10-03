@@ -13,3 +13,6 @@ scripts/rail-shots/
 
 # Obsidian vault (local knowledge base, gestionado por MCP)
 vault/
+
+# Originales de fotos del cliente (se suben a Supabase Storage, no a git)
+FOTOS/
