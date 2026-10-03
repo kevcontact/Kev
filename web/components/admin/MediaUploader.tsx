@@ -90,7 +90,7 @@ export function MediaUploader({ projectId, projectSlug }: { projectId: string; p
           }}
         />
         <strong>{busy ? 'Subiendo…' : 'Agregar fotos o videos'}</strong>
-        <span>Fotos JPG/PNG/WebP (se optimizan solas) · Videos MP4 H.264 hasta 50 MB</span>
+        <span>Fotos JPG/PNG/WebP (se optimizan solas) · Videos MP4 H.264 1080p hasta 300 MB</span>
       </label>
       {statuses.length > 0 && (
         <ul className="adm-status" aria-live="polite">

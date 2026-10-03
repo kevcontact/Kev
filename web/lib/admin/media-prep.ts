@@ -1,14 +1,14 @@
 /**
  * Preparación de medios en el navegador antes de subir (sin servidor intermedio):
  *  · fotos → JPEG, lado largo máx. 2560 px (la web no necesita más; ~10× menos peso)
- *  · videos → solo MP4 ≤ 50 MB (límite del bucket); se extrae póster y metadatos.
+ *  · videos → solo MP4 ≤ 300 MB (límite del bucket kev-media); se extrae póster y metadatos.
  * Transcodificar video en el navegador no es viable: el productor debe exportar
  * H.264 720p/1080p (ver docs del panel).
  */
 export const MAX_IMAGE_EDGE = 2560
 export const POSTER_EDGE = 1280
 export const JPEG_QUALITY = 0.86
-export const MAX_VIDEO_BYTES = 50 * 1024 * 1024
+export const MAX_VIDEO_BYTES = 300 * 1024 * 1024
 export const MAX_IMAGE_INPUT_BYTES = 60 * 1024 * 1024
 
 export type PreparedImage = { kind: 'image'; blob: Blob; width: number; height: number }
@@ -66,7 +66,7 @@ const once = (el: HTMLVideoElement, event: string) =>
 
 export async function prepareVideo(file: File): Promise<PreparedVideo> {
   if (file.type !== 'video/mp4') throw new Error('Solo MP4 (H.264)')
-  if (file.size > MAX_VIDEO_BYTES) throw new Error('Video de más de 50 MB: expórtalo en 720p/1080p')
+  if (file.size > MAX_VIDEO_BYTES) throw new Error('Video de más de 300 MB: expórtalo en 1080p H.264')
 
   const url = URL.createObjectURL(file)
   const video = document.createElement('video')
